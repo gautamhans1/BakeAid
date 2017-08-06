@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,8 @@ public class RecipeFragment extends Fragment {
     private Retrofit mRetrofit;
     private RecipesAPI mRecipesAPI;
     private RecipeAdapter mRecipeAdapter;
+    @BindView(R.id.recipe_progress_bar)
+    ProgressBar mProgressBar;
 
 
     public RecipeFragment() {
@@ -62,11 +65,13 @@ public class RecipeFragment extends Fragment {
 
         Call<ArrayList<Recipe>> recipes = mRecipesAPI.getRecipes();
 
+        mProgressBar.setVisibility(View.VISIBLE);
         recipes.enqueue(new Callback<ArrayList<Recipe>>() {
             @Override
             public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                 Log.d("Response Code: ", String.valueOf(response.code()));
                 if (response.isSuccessful()) {
+                    mProgressBar.setVisibility(View.GONE);
                     ArrayList<Recipe> recipes = response.body();
                     mRecipeAdapter = new RecipeAdapter(recipes, (RecipeActivity) getActivity());
                     mRecyclerView.setAdapter(mRecipeAdapter);
@@ -75,6 +80,7 @@ public class RecipeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
+                Log.d("Retrofit Error: ", t.getMessage());
                 t.printStackTrace();
             }
         });
