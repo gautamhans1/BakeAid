@@ -31,7 +31,7 @@ import retrofit2.Retrofit;
  * Created by Gautam on 06-Aug-17.
  */
 
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends android.support.v4.app.Fragment {
 
     @BindView(R.id.rv_recipes)
     RecyclerView mRecyclerView;
@@ -73,7 +73,7 @@ public class RecipeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     mProgressBar.setVisibility(View.GONE);
                     ArrayList<Recipe> recipes = response.body();
-                    mRecipeAdapter = new RecipeAdapter(recipes, (RecipeActivity) getActivity());
+                    mRecipeAdapter = new RecipeAdapter(recipes, (RecipeActivity) getActivity(), (RecipeActivity) getActivity());
                     mRecyclerView.setAdapter(mRecipeAdapter);
                 }
             }
