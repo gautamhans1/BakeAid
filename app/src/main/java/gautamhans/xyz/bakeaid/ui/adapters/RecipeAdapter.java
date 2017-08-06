@@ -1,7 +1,9 @@
 package gautamhans.xyz.bakeaid.ui.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,24 +45,42 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.mRecipeName.setText(mRecipe.get(position).getName());
 
         String imageUrl = mRecipe.get(position).getImage();
-        if(imageUrl != ""){
+        if (imageUrl != "") {
             Uri uri = Uri.parse(imageUrl).buildUpon().build();
             Glide.with(mContext).load(uri).into(holder.mRecipeImage);
         } else {
-            holder.mRecipeImage.setImageResource(R.drawable.nutella_pie);
+            // TODO : Optimize Images & this code
+            switch (mRecipe.get(position).getId()){
+                case 1:
+                    holder.mRecipeImage.setImageResource(R.drawable.nutella_pie);
+                    break;
+                case 2:
+                    holder.mRecipeImage.setImageResource(R.drawable.brownies);
+                    break;
+                case 3:
+                    holder.mRecipeImage.setImageResource(R.drawable.yellow_cake);
+                    break;
+                case 4:
+                    holder.mRecipeImage.setImageResource(R.drawable.cheesecake);
+                    break;
+                default:
+                    holder.mRecipeImage.setImageResource(R.drawable.food);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        if(mRecipe!=null) return mRecipe.size();
+        if (mRecipe != null) return mRecipe.size();
         else return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.recipe_name) TextView mRecipeName;
-        @BindView(R.id.recipe_image) ImageView mRecipeImage;
+        @BindView(R.id.recipe_name)
+        TextView mRecipeName;
+        @BindView(R.id.recipe_image)
+        ImageView mRecipeImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
