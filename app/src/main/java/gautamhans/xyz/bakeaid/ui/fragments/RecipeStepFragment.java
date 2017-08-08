@@ -11,8 +11,10 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -34,6 +36,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,17 +58,21 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     SimpleExoPlayerView mPlayerView;
     @BindView(R.id.stepDescription)
     TextView stepDescription;
+    @BindView(R.id.previousStep)
+    Button mPreviousStep;
+    @BindView(R.id.nextStep)
+    Button mNextStep;
     private SimpleExoPlayer mExoPlayer;
     private PlaybackStateCompat.Builder mStateBuilder;
     private ArrayList<Step> mStep;
     private int selectedIndex;
     private Handler mHandler;
     private String mVideoUrl;
+    private StepNextPrevListener mStepNextPrevListener;
 
     public RecipeStepFragment() {
 
     }
-
 
     @Nullable
     @Override
@@ -76,6 +83,8 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         mHandler = new Handler();
         mStep = new ArrayList<>();
         mRecipe = new ArrayList<>();
+
+        mStepNextPrevListener = (RecipeDetailsActivity) getActivity();
 
         initializeMediaSession();
 
@@ -108,7 +117,41 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
             mPlayerView.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
         }
 
+        setupClickListeners();
+
         return rootView;
+    }
+
+    private void setupClickListeners() {
+        mPreviousStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mStep.get(selectedIndex).getId() > 0) {
+                    if (mExoPlayer != null) {
+                        mExoPlayer.stop();
+                    }
+                    mStepNextPrevListener.onStepClick(mStep, mStep.get(selectedIndex).getId() - 1, recipeName);
+                } else {
+                    Toast.makeText(getActivity(), "You are already on the first step.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        mNextStep.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+                int lastIndex = mStep.size() - 1;
+                if (mStep.get(selectedIndex).getId() < mStep.get(lastIndex).getId()) {
+                    if (mExoPlayer != null) {
+                        mExoPlayer.stop();
+                    }
+                    mStepNextPrevListener.onStepClick(mStep, mStep.get(selectedIndex).getId() + 1, recipeName);
+                } else {
+                    Toast.makeText(getContext(), "You are already on the last step.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
     }
 
     @Override
@@ -221,6 +264,10 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
 
+    }
+
+    public interface StepNextPrevListener {
+        void onStepClick(List<Step> steps, int index, String recipeName);
     }
 
     private class MySessionCallback extends MediaSessionCompat.Callback {

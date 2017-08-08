@@ -22,7 +22,7 @@ import gautamhans.xyz.bakeaid.ui.fragments.RecipeStepFragment;
  * Created by Gautam on 06-Aug-17.
  */
 
-public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsAdapter.StepClickListener {
+public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsAdapter.StepClickListener, RecipeStepFragment.StepNextPrevListener {
     //    static final String STACK_RECIPE_DETAILS = "STACK_RECIPE_DETAIL";
     public static final String RECIPE_TITLE = "recipe_title";
     public static String SELECTED_STEPS = "selected_steps";
