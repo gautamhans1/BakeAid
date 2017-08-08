@@ -43,6 +43,9 @@ dependencies {
     // debug
     debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
 
+    // Exoplayer
+    compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
+
     testCompile 'junit:junit:4.12'
 }
 

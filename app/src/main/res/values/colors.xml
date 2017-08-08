@@ -8,5 +8,7 @@
     <color name="white">#FFF</color>
     <color name="darker_grey">#757575</color>
     <color name="black">#000</color>
+    <color name="pink">#FF4081</color>
+    <color name="indigo">#6F4CA8</color>
 
 </resources>

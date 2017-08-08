@@ -4,9 +4,12 @@ import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -22,7 +25,6 @@ import butterknife.ButterKnife;
 import gautamhans.xyz.bakeaid.R;
 import gautamhans.xyz.bakeaid.pojos.Ingredient;
 import gautamhans.xyz.bakeaid.pojos.Recipe;
-import gautamhans.xyz.bakeaid.pojos.Step;
 import gautamhans.xyz.bakeaid.ui.RecipeActivity;
 import gautamhans.xyz.bakeaid.ui.RecipeDetailsActivity;
 import gautamhans.xyz.bakeaid.ui.adapters.RecipeDetailsAdapter;
@@ -79,7 +81,7 @@ public class RecipeDetailsFragment extends Fragment {
         recipeName = mRecipe.get(0).getName();
 
         for (int i = 0; i < ingredients.size(); i++) {
-            mIngredientsView.append("\u2022 " + ingredients.get(i).getIngredient() + "\n");
+            mIngredientsView.append(" --- " + ingredients.get(i).getIngredient() + "\n");
             mIngredientsView.append("\t\t\tQuantity: " + ingredients.get(i).getQuantity().toString() + " " + ingredients.get(i).getMeasure() + "\n");
         }
     }
@@ -88,7 +90,7 @@ public class RecipeDetailsFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager((RecipeDetailsActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        RecipeDetailsAdapter adapter = new RecipeDetailsAdapter(mRecipe, recipeName, (RecipeDetailsActivity) getActivity());
+        RecipeDetailsAdapter adapter = new RecipeDetailsAdapter(mRecipe, recipeName, (RecipeDetailsActivity) getActivity(), (RecipeDetailsActivity)getActivity());
         mRecyclerView.setAdapter(adapter);
     }
 
@@ -116,5 +118,11 @@ public class RecipeDetailsFragment extends Fragment {
         return animator;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }

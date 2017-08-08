@@ -24,11 +24,13 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
     List<Step> mStep;
     private String mRecipeName;
     private Context mContext;
+    private StepClickListener mStepClickListener;
 
-    public RecipeDetailsAdapter(List<Recipe> mStep, String mRecipeName, Context mContext) {
+    public RecipeDetailsAdapter(List<Recipe> mStep, String mRecipeName, Context mContext, StepClickListener mStepClickListener) {
         this.mStep = mStep.get(0).getSteps();
         this.mRecipeName = mRecipeName;
         this.mContext = mContext;
+        this.mStepClickListener = mStepClickListener;
     }
 
     @Override
@@ -51,15 +53,25 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
         return mStep != null ? mStep.size() : 0;
     }
 
+    public interface StepClickListener {
+        void onStepClick(List<Step> stepOut, int clickedStepIndex, String recipeName);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.step_desc)
         TextView mStepDescriptionView;
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mStepClickListener.onStepClick(mStep, getAdapterPosition(), mRecipeName);
+            }
+        };
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(clickListener);
         }
-
     }
 }
