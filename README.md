@@ -6,7 +6,6 @@ Udacity Android Developer Nanodegree Project 3 (Part 2 - Advanced Android Develo
 - [x] Fetch Data from JSON
 - [ ] Create Master-Detail Flow for RecipeActivity & RecipeDetailActivity
 - [x] Create ExoPlayer MediaSessions
-- [ ] Create Widget
-- [ ] Add Preference screen for displaying ListView of Steps in Widget
+- [x] Create Widget
 - [ ] Create Espresso Tests
 - [ ] Make all layouts responsive for screensizes
