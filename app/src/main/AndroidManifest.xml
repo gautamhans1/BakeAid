@@ -35,6 +35,10 @@
         <service android:name=".widget.WidgetGridService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="6a3762f96d2ec46ea1fc0dba87b1e784b9200e92" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -41,10 +41,14 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         if (savedInstanceState == null) {
 
             if (getIntent() != null) {
-                bundle = getIntent().getExtras();
-                mRecipe = new ArrayList<>();
-                mRecipe = bundle.getParcelableArrayList(RecipeActivity.RECIPE_SEL);
-                recipeName = mRecipe.get(0).getName();
+                try {
+                    bundle = getIntent().getExtras();
+                    mRecipe = new ArrayList<>();
+                    mRecipe = bundle.getParcelableArrayList(RecipeActivity.RECIPE_SEL);
+                    recipeName = mRecipe.get(0).getName();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             final RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
