@@ -4,8 +4,6 @@ import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +26,7 @@ import gautamhans.xyz.bakeaid.pojos.Recipe;
 import gautamhans.xyz.bakeaid.ui.RecipeActivity;
 import gautamhans.xyz.bakeaid.ui.RecipeDetailsActivity;
 import gautamhans.xyz.bakeaid.ui.adapters.RecipeDetailsAdapter;
+import gautamhans.xyz.bakeaid.widget.WidgetUpdateService;
 
 /**
  * Created by Gautam on 06-Aug-17.
@@ -44,6 +43,8 @@ public class RecipeDetailsFragment extends Fragment {
     LinearLayout mLinearLayout;
     @BindView(R.id.rv_steps)
     RecyclerView mRecyclerView;
+    @BindView(R.id.ingredientsLayout)
+    RelativeLayout ingredientsLayout;
     LinearLayoutManager mLayoutManager;
 
     @Nullable
@@ -73,24 +74,39 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
 
+        ingredientsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickButton(mLinearLayout, mExpandButton);
+            }
+        });
+
+
         return rootView;
     }
 
-    private void addIngredients(){
+    private void addIngredients() {
         List<Ingredient> ingredients = mRecipe.get(0).getIngredients();
         recipeName = mRecipe.get(0).getName();
+
+        ArrayList<String> ingredientsWidget = new ArrayList<>();
 
         for (int i = 0; i < ingredients.size(); i++) {
             mIngredientsView.append(" --- " + ingredients.get(i).getIngredient() + "\n");
             mIngredientsView.append("\t\t\tQuantity: " + ingredients.get(i).getQuantity().toString() + " " + ingredients.get(i).getMeasure() + "\n");
+
+            ingredientsWidget.add(ingredients.get(i).getIngredient() + "\n" + "Quantity: " + ingredients.get(i).getQuantity() + " " +ingredients.get(i).getMeasure() +  "\n");
         }
+
+        WidgetUpdateService.startBakingAidService(getContext(), ingredientsWidget);
+
     }
 
-    private void addSteps(){
-        mLayoutManager = new LinearLayoutManager((RecipeDetailsActivity) getActivity());
+    private void addSteps() {
+        mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        RecipeDetailsAdapter adapter = new RecipeDetailsAdapter(mRecipe, recipeName, (RecipeDetailsActivity) getActivity(), (RecipeDetailsActivity)getActivity());
+        RecipeDetailsAdapter adapter = new RecipeDetailsAdapter(mRecipe, recipeName, getActivity(), (RecipeDetailsActivity) getActivity());
         mRecyclerView.setAdapter(adapter);
     }
 
@@ -101,11 +117,11 @@ public class RecipeDetailsFragment extends Fragment {
         outState.putString(RECIPE_NAME, recipeName);
     }
 
-    private void onClickButton(final LinearLayout expandableLayout, final RelativeLayout button){
-        if (expandableLayout.getVisibility() == View.VISIBLE){
+    private void onClickButton(final LinearLayout expandableLayout, final RelativeLayout button) {
+        if (expandableLayout.getVisibility() == View.VISIBLE) {
             createRotateAnimator(button, 180f, 0f).start();
             expandableLayout.setVisibility(View.GONE);
-        }else{
+        } else {
             createRotateAnimator(button, 0f, 180f).start();
             expandableLayout.setVisibility(View.VISIBLE);
         }
@@ -120,7 +136,6 @@ public class RecipeDetailsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
 
 
         return super.onOptionsItemSelected(item);

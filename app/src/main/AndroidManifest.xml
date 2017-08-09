@@ -16,10 +16,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.RecipeDetailsActivity"
+        <activity
+            android:name=".ui.RecipeDetailsActivity"
             android:parentActivityName=".ui.RecipeActivity" />
 
+        <receiver android:name=".widget.BakingAidWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE2" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_aid_widget_provider_info" />
+        </receiver>
+
+        <service android:name=".widget.WidgetUpdateService" />
+        <service android:name=".widget.WidgetGridService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            />
     </application>
 
 </manifest>

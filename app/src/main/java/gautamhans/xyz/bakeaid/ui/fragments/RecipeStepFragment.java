@@ -1,8 +1,8 @@
 package gautamhans.xyz.bakeaid.ui.fragments;
 
+import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -66,7 +66,6 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     private PlaybackStateCompat.Builder mStateBuilder;
     private ArrayList<Step> mStep;
     private int selectedIndex;
-    private Handler mHandler;
     private String mVideoUrl;
     private StepNextPrevListener mStepNextPrevListener;
 
@@ -80,7 +79,6 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         View rootView = inflater.inflate(R.layout.recipe_step_fragment, container, false);
         ButterKnife.bind(this, rootView);
 
-        mHandler = new Handler();
         mStep = new ArrayList<>();
         mRecipe = new ArrayList<>();
 
@@ -108,14 +106,23 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         stepDescription.setText("Description: \n\n" + mStep.get(selectedIndex).getDescription());
         mVideoUrl = mStep.get(selectedIndex).getVideoURL();
 
+
+
         if (!mVideoUrl.isEmpty()) {
             Uri videoUri = Uri.parse(mVideoUrl);
             initializeExoPlayer(videoUri);
+
+            if(rootView.getTag()!=null && rootView.getTag()=="landscape"){
+                stepDescription.setVisibility(View.GONE);
+            }
+
         } else {
             mExoPlayer = null;
             mPlayerView.setForeground(ContextCompat.getDrawable(getContext(), R.drawable.no_video));
             mPlayerView.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
         }
+
+
 
         setupClickListeners();
 
@@ -167,15 +174,15 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
 
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance((RecipeDetailsActivity) getActivity(), trackSelector, loadControl);
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
 
             // Set the ExoPlayer.EventListener to this activity.
             mExoPlayer.addListener(this);
 
-            String userAgent = Util.getUserAgent((RecipeDetailsActivity) getActivity(), "Bake Aid");
+            String userAgent = Util.getUserAgent(getActivity(), "Bake Aid");
             MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
-                    (RecipeDetailsActivity) getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
 
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
@@ -185,7 +192,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
     private void initializeMediaSession() {
 
         // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat((RecipeDetailsActivity) getActivity(), RecipeDetailsActivity.class.getSimpleName());
+        mMediaSession = new MediaSessionCompat(getActivity(), RecipeDetailsActivity.class.getSimpleName());
 
         // Enable callbacks from MediaButtons and TransportControls.
         mMediaSession.setFlags(
@@ -198,7 +205,8 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
                         PlaybackStateCompat.ACTION_PLAY |
                                 PlaybackStateCompat.ACTION_PAUSE |
                                 PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
+                                PlaybackStateCompat.ACTION_PLAY_PAUSE |
+                                PlaybackState.ACTION_SKIP_TO_NEXT);
 
         mMediaSession.setPlaybackState(mStateBuilder.build());
 
@@ -284,6 +292,11 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
         @Override
         public void onSkipToPrevious() {
             mExoPlayer.seekTo(0);
+        }
+
+        @Override
+        public void onSkipToNext() {
+            mNextStep.performClick();
         }
     }
 }
