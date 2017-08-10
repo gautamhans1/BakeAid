@@ -116,7 +116,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
 
         } else {
             mFragmentManager.beginTransaction()
-                    .replace(R.id.recipe_details_fragment_container, mRecipeStepFragment)
+                    .replace(R.id.fragment_container, mRecipeStepFragment)
                     .addToBackStack(RECIPE_DETAIL_STACK)
                     .commit();
         }

@@ -61,6 +61,16 @@ dependencies {
     // Exoplayer
     compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
 
+    // Espresso
+    compile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
+
+    // Testing
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support:support-annotations:25.3.1'
+
     testCompile 'junit:junit:4.12'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;

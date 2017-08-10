@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import gautamhans.xyz.bakeaid.IdlingResource.SimpleIdlingResource;
 import gautamhans.xyz.bakeaid.R;
 import gautamhans.xyz.bakeaid.pojos.Recipe;
 import gautamhans.xyz.bakeaid.retrofit.RecipesAPI;
@@ -54,16 +55,21 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
         ButterKnife.bind(this, rootView);
 
         if (rootView.getTag() != null && rootView.getTag().equals("landscape")) {
-            mGridLayoutManager = new GridLayoutManager((RecipeActivity) getActivity(), 2);
+            mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
             mRecyclerView.setLayoutManager(mGridLayoutManager);
         } else {
-            mLinearLayoutManager = new LinearLayoutManager((RecipeActivity) getActivity());
+            mLinearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLinearLayoutManager);
         }
         mRetrofit = RecipesClient.getClient();
         mRecipesAPI = mRetrofit.create(RecipesAPI.class);
 
         Call<ArrayList<Recipe>> recipes = mRecipesAPI.getRecipes();
+
+        final SimpleIdlingResource idlingResource = (SimpleIdlingResource) ((RecipeActivity) getActivity()).getIdlingResource();
+        if(idlingResource!=null){
+            idlingResource.setIdleState(false);
+        }
 
         mProgressBar.setVisibility(View.VISIBLE);
         recipes.enqueue(new Callback<ArrayList<Recipe>>() {
@@ -75,6 +81,10 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
                     ArrayList<Recipe> recipes = response.body();
                     mRecipeAdapter = new RecipeAdapter(recipes, (RecipeActivity) getActivity(), (RecipeActivity) getActivity());
                     mRecyclerView.setAdapter(mRecipeAdapter);
+
+                    if(idlingResource!=null){
+                        idlingResource.setIdleState(true);
+                    }
                 }
             }
 
