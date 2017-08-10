@@ -106,11 +106,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         RecipeStepFragment mRecipeStepFragment = newStepInstance(stepOut, clickedStepIndex, recipeName);
         FragmentManager mFragmentManager = getSupportFragmentManager();
 
-        if (getResources().getBoolean(R.bool.tablet_land)) {
+        if (findViewById(R.id.land_sw600_layout).getTag() != null && findViewById(R.id.land_sw600_layout).getTag().equals("tablet-landscape")) {
             mFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_video, mRecipeStepFragment)
                     .commit();
-
         } else {
             mFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, mRecipeStepFragment)

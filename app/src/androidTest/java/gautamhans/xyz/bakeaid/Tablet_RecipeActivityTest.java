@@ -1,4 +1,4 @@
-package gautamhans.xyz.bakeaid.ui;
+package gautamhans.xyz.bakeaid;
 
 
 import android.support.test.espresso.Espresso;
@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import gautamhans.xyz.bakeaid.R;
+import gautamhans.xyz.bakeaid.ui.RecipeActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -30,7 +31,7 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class RecipeActivityTest {
+public class Tablet_RecipeActivityTest {
 
     @Rule
     public ActivityTestRule<RecipeActivity> mActivityTestRule = new ActivityTestRule<>(RecipeActivity.class);
