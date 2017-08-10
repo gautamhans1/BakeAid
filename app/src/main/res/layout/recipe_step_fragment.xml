@@ -9,7 +9,8 @@
         android:id="@+id/playerView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="playerVideo"/>
 
     <ImageView
         android:id="@+id/thumbNail"
