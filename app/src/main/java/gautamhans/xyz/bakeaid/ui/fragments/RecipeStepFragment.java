@@ -113,7 +113,7 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
             initializeExoPlayer(videoUri);
 
             if(rootView.getTag()!=null && rootView.getTag()=="landscape"){
-                stepDescription.setVisibility(View.GONE);
+
             }
 
         } else {

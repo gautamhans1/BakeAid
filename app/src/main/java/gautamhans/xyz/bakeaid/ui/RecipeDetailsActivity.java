@@ -3,7 +3,6 @@ package gautamhans.xyz.bakeaid.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -56,8 +55,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.recipe_details_fragment_container, recipeDetailsFragment)
+                    .replace(R.id.fragment_container, recipeDetailsFragment)
                     .commit();
+
+            if (findViewById(R.id.land_sw600_layout).getTag() != null && findViewById(R.id.land_sw600_layout).getTag().equals("tablet-landscape")) {
+                final RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
+                recipeStepFragment.setArguments(bundle);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_video, recipeStepFragment)
+                        .commit();
+            }
 
         } else {
             recipeName = savedInstanceState.getString(RECIPE_TITLE);
@@ -75,7 +82,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(getSupportFragmentManager().getBackStackEntryCount()>0){
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
             return true;
         }
@@ -101,10 +108,18 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         bundle.putString(RECIPE_TITLE, recipeName);
         mRecipeStepFragment.setArguments(bundle);
 
-        mFragmentManager.beginTransaction()
-                .replace(R.id.recipe_details_fragment_container, mRecipeStepFragment)
-                .addToBackStack(RECIPE_DETAIL_STACK)
-                .commit();
+        if (findViewById(R.id.land_sw600_layout).getTag() != null && findViewById(R.id.land_sw600_layout).getTag().equals("tablet-landscape")) {
+
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_video, mRecipeStepFragment)
+                    .commit();
+
+        } else {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.recipe_details_fragment_container, mRecipeStepFragment)
+                    .addToBackStack(RECIPE_DETAIL_STACK)
+                    .commit();
+        }
     }
 
 
