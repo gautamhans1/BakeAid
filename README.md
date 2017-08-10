@@ -10,3 +10,5 @@ Udacity Android Developer Nanodegree Project 3 (Part 2 - Advanced Android Develo
 - [x] Create Espresso Tests
 - [x] Make all layouts responsive for screensizes
 - [x] Fix widget weird behavior
+- [ ] Fix the goddamn widget
+- [ ] Write Espresso UI Tests

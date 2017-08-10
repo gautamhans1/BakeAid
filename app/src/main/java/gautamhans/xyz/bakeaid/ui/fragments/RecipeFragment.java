@@ -1,7 +1,7 @@
 package gautamhans.xyz.bakeaid.ui.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,15 +34,22 @@ import retrofit2.Retrofit;
 
 public class RecipeFragment extends android.support.v4.app.Fragment {
 
+    static final String RECIPES_SAVED = "RECIPES_SAVED";
+    static final String RECYLER_VIEW_STATE = "RECYLER_VIEW_STATE";
+    boolean isPortrait = true;
+
+    Parcelable mListState;
     @BindView(R.id.rv_recipes)
     RecyclerView mRecyclerView;
+    @BindView(R.id.recipe_progress_bar)
+    ProgressBar mProgressBar;
+    ArrayList<Recipe> recipes;
+    SimpleIdlingResource idlingResource;
     private LinearLayoutManager mLinearLayoutManager;
     private GridLayoutManager mGridLayoutManager;
     private Retrofit mRetrofit;
     private RecipesAPI mRecipesAPI;
     private RecipeAdapter mRecipeAdapter;
-    @BindView(R.id.recipe_progress_bar)
-    ProgressBar mProgressBar;
 
 
     public RecipeFragment() {
@@ -57,19 +64,37 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
         if (rootView.getTag() != null && rootView.getTag().equals("landscape")) {
             mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
             mRecyclerView.setLayoutManager(mGridLayoutManager);
+            isPortrait = false;
         } else {
             mLinearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLinearLayoutManager);
+            isPortrait = true;
         }
+
+        idlingResource = (SimpleIdlingResource) ((RecipeActivity) getActivity()).getIdlingResource();
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
+
+        if(savedInstanceState!=null){
+            recipes = savedInstanceState.getParcelableArrayList(RECIPES_SAVED);
+            mRecipeAdapter = new RecipeAdapter(recipes, getActivity(), (RecipeActivity) getActivity());
+            mRecyclerView.setAdapter(mRecipeAdapter);
+            mListState = savedInstanceState.getParcelable(RECYLER_VIEW_STATE);
+            if(isPortrait) mLinearLayoutManager.onRestoreInstanceState(mListState);
+            else mGridLayoutManager.onRestoreInstanceState(mListState);
+        } else {
+            loadRecipes();
+        }
+
+        return rootView;
+    }
+
+    private void loadRecipes() {
         mRetrofit = RecipesClient.getClient();
         mRecipesAPI = mRetrofit.create(RecipesAPI.class);
 
         Call<ArrayList<Recipe>> recipes = mRecipesAPI.getRecipes();
-
-        final SimpleIdlingResource idlingResource = (SimpleIdlingResource) ((RecipeActivity) getActivity()).getIdlingResource();
-        if(idlingResource!=null){
-            idlingResource.setIdleState(false);
-        }
 
         mProgressBar.setVisibility(View.VISIBLE);
         recipes.enqueue(new Callback<ArrayList<Recipe>>() {
@@ -79,10 +104,11 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
                 if (response.isSuccessful()) {
                     mProgressBar.setVisibility(View.GONE);
                     ArrayList<Recipe> recipes = response.body();
+                    saveList(recipes);
                     mRecipeAdapter = new RecipeAdapter(recipes, (RecipeActivity) getActivity(), (RecipeActivity) getActivity());
                     mRecyclerView.setAdapter(mRecipeAdapter);
 
-                    if(idlingResource!=null){
+                    if (idlingResource != null) {
                         idlingResource.setIdleState(true);
                     }
                 }
@@ -94,7 +120,22 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
                 t.printStackTrace();
             }
         });
+    }
 
-        return rootView;
+    private void saveList(ArrayList<Recipe> recipe) {
+        this.recipes = recipe;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(RECIPES_SAVED, recipes);
+        if (isPortrait) {
+            mListState = mLinearLayoutManager.onSaveInstanceState();
+            outState.putParcelable(RECYLER_VIEW_STATE, mListState);
+        } else {
+            mListState = mGridLayoutManager.onSaveInstanceState();
+            outState.putParcelable(RECYLER_VIEW_STATE, mListState);
+        }
     }
 }

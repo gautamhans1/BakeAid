@@ -1,7 +1,10 @@
 package gautamhans.xyz.bakeaid.ui.fragments;
 
 import android.animation.ObjectAnimator;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +39,9 @@ import gautamhans.xyz.bakeaid.widget.WidgetUpdateService;
 public class RecipeDetailsFragment extends Fragment {
     static String RECIPE_SEL = "recipe_select";
     static String RECIPE_NAME = "recipe_name";
+    static String RECYCLER_VIEW_STATE_KEY = "RECYCLER_VIEW_STATE_KEY";
+    static String INGREDIENTS_STATE = "INGREDIENTS_STATE";
+    static boolean isExpanded = false;
     ArrayList<Recipe> mRecipe;
     String recipeName;
     RelativeLayout mExpandButton;
@@ -47,6 +53,7 @@ public class RecipeDetailsFragment extends Fragment {
     @BindView(R.id.ingredientsLayout)
     RelativeLayout ingredientsLayout;
     LinearLayoutManager mLayoutManager;
+    Parcelable mListState;
 
     @Nullable
     @Override
@@ -87,7 +94,25 @@ public class RecipeDetailsFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(RECYCLER_VIEW_STATE_KEY);
+            mLayoutManager.onRestoreInstanceState(mListState);
+            isExpanded = savedInstanceState.getBoolean(INGREDIENTS_STATE);
+            if (isExpanded) {
+                mLinearLayout.setVisibility(View.VISIBLE);
+            } else {
+                mLinearLayout.setVisibility(View.GONE);
+            }
+        }
+    }
+
     private void addIngredients() {
+        WidgetStateChecker.setWidgetState("detail");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int recipeId = sharedPreferences.getInt(RecipeActivity.RECIPE_ID, 0);
         List<Ingredient> ingredients = mRecipe.get(0).getIngredients();
         recipeName = mRecipe.get(0).getName();
 
@@ -97,7 +122,7 @@ public class RecipeDetailsFragment extends Fragment {
             mIngredientsView.append(" --- " + ingredients.get(i).getIngredient() + "\n");
             mIngredientsView.append("\t\t\tQuantity: " + ingredients.get(i).getQuantity().toString() + " " + ingredients.get(i).getMeasure() + "\n");
 
-            ingredientsWidget.add(ingredients.get(i).getIngredient() + "\n" + "Quantity: " + ingredients.get(i).getQuantity() + " " +ingredients.get(i).getMeasure() +  "\n");
+            ingredientsWidget.add(ingredients.get(i).getIngredient() + "\n" + "Quantity: " + ingredients.get(i).getQuantity() + " " + ingredients.get(i).getMeasure() + "\n");
         }
 
         WidgetUpdateService.startBakingAidService(getContext(), ingredientsWidget);
@@ -117,15 +142,20 @@ public class RecipeDetailsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(RECIPE_SEL, mRecipe);
         outState.putString(RECIPE_NAME, recipeName);
+        mListState = mLayoutManager.onSaveInstanceState();
+        outState.putParcelable(RECYCLER_VIEW_STATE_KEY, mListState);
+        outState.putBoolean(INGREDIENTS_STATE, isExpanded);
     }
 
     private void onClickButton(final LinearLayout expandableLayout, final RelativeLayout button) {
         if (expandableLayout.getVisibility() == View.VISIBLE) {
             createRotateAnimator(button, 180f, 0f).start();
             expandableLayout.setVisibility(View.GONE);
+            isExpanded = false;
         } else {
             createRotateAnimator(button, 0f, 180f).start();
             expandableLayout.setVisibility(View.VISIBLE);
+            isExpanded = true;
         }
     }
 
@@ -136,10 +166,4 @@ public class RecipeDetailsFragment extends Fragment {
         return animator;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-
-        return super.onOptionsItemSelected(item);
-    }
 }

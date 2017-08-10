@@ -30,6 +30,7 @@ public class BakingAidWidgetProvider extends AppWidgetProvider {
                                 int appWidgetId) {
 
         widgetState = WidgetStateChecker.getWidgetState();
+
         if (widgetState.equals("main")) {
             views = new RemoteViews(context.getPackageName(), R.layout.baking_aid_widget_provider);
             Intent intent = new Intent(context, RecipeActivity.class);
@@ -37,7 +38,7 @@ public class BakingAidWidgetProvider extends AppWidgetProvider {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setPendingIntentTemplate(R.id.open_app, pendingIntent);
 
-        } else {
+        } else if (widgetState.equals("detail")){
             views = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
             Intent intent = new Intent(context, RecipeDetailsActivity.class);
             intent.addCategory(Intent.ACTION_MAIN);

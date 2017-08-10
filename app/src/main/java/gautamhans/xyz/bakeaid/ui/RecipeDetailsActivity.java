@@ -16,13 +16,13 @@ import gautamhans.xyz.bakeaid.pojos.Step;
 import gautamhans.xyz.bakeaid.ui.adapters.RecipeDetailsAdapter;
 import gautamhans.xyz.bakeaid.ui.fragments.RecipeDetailsFragment;
 import gautamhans.xyz.bakeaid.ui.fragments.RecipeStepFragment;
+import gautamhans.xyz.bakeaid.utils.WidgetStateChecker;
 
 /**
  * Created by Gautam on 06-Aug-17.
  */
 
 public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsAdapter.StepClickListener, RecipeStepFragment.StepNextPrevListener {
-    //    static final String STACK_RECIPE_DETAILS = "STACK_RECIPE_DETAIL";
     public static final String RECIPE_TITLE = "recipe_title";
     public static String SELECTED_STEPS = "selected_steps";
     public static String SELECTED_INDEX = "selected_index";
@@ -37,21 +37,18 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
+        WidgetStateChecker.setWidgetState("detail");
+
         if (savedInstanceState == null) {
 
             if (getIntent() != null) {
-                try {
                     bundle = getIntent().getExtras();
                     mRecipe = new ArrayList<>();
                     mRecipe = bundle.getParcelableArrayList(RecipeActivity.RECIPE_SEL);
                     recipeName = mRecipe.get(0).getName();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
-            final RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
-            recipeDetailsFragment.setArguments(bundle);
+            RecipeDetailsFragment recipeDetailsFragment = newInstance(bundle);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
@@ -79,6 +76,14 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
 
     }
 
+    public static RecipeDetailsFragment newInstance(Bundle bundle) {
+        RecipeDetailsFragment f = new RecipeDetailsFragment();
+        f.setArguments(bundle);
+        return f;
+    }
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -98,18 +103,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
 
     @Override
     public void onStepClick(List<Step> stepOut, int clickedStepIndex, String recipeName) {
-        RecipeStepFragment mRecipeStepFragment = new RecipeStepFragment();
+        RecipeStepFragment mRecipeStepFragment = newStepInstance(stepOut, clickedStepIndex, recipeName);
         FragmentManager mFragmentManager = getSupportFragmentManager();
-        ArrayList<Step> mStep = (ArrayList<Step>) stepOut;
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(SELECTED_STEPS, mStep);
-        bundle.putInt(SELECTED_INDEX, clickedStepIndex);
-        bundle.putString(RECIPE_TITLE, recipeName);
-        mRecipeStepFragment.setArguments(bundle);
-
-        if (findViewById(R.id.land_sw600_layout).getTag() != null && findViewById(R.id.land_sw600_layout).getTag().equals("tablet-landscape")) {
-
+        if (getResources().getBoolean(R.bool.tablet_land)) {
             mFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_video, mRecipeStepFragment)
                     .commit();
@@ -122,5 +119,14 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         }
     }
 
-
+    public static RecipeStepFragment newStepInstance(List<Step> stepOut, int clickedStepIndex, String recipeName){
+        RecipeStepFragment f = new RecipeStepFragment();
+        ArrayList<Step> mStep = (ArrayList<Step>) stepOut;
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(SELECTED_STEPS, mStep);
+        bundle.putInt(SELECTED_INDEX, clickedStepIndex);
+        bundle.putString(RECIPE_TITLE, recipeName);
+        f.setArguments(bundle);
+        return f;
+    }
 }

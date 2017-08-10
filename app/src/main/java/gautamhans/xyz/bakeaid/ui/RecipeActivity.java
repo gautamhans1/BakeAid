@@ -28,6 +28,8 @@ import gautamhans.xyz.bakeaid.ui.adapters.RecipeAdapter;
 public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.RecipeClickListener {
 
     public static String RECIPE_SEL = "recipe_select";
+    public static SharedPreferences sharedPreferences;
+    public static String RECIPE_ID = "recip_id";
 
     @Nullable
     private SimpleIdlingResource mIdlingResource;
@@ -57,7 +59,10 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.R
         selectedRecipeData.add(clickedIndex);
         bundle.putParcelableArrayList(RECIPE_SEL, selectedRecipeData);
 
-//        Toast.makeText(this, "Recipe Clicked", Toast.LENGTH_SHORT).show();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(RECIPE_ID, clickedIndex.getId());
+        editor.apply();
 
         final Intent intent = new Intent(this, RecipeDetailsActivity.class);
         intent.putExtras(bundle);

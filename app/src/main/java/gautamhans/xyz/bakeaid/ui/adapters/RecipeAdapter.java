@@ -49,11 +49,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.mRecipeName.setText(mRecipe.get(position).getName());
 
         String imageUrl = mRecipe.get(position).getImage();
-        if (imageUrl != "") {
+        if (!imageUrl.equals("")) {
             Uri uri = Uri.parse(imageUrl).buildUpon().build();
             Glide.with(mContext).load(uri).into(holder.mRecipeImage);
         } else {
-            // TODO : Optimize Images & this code
             switch (mRecipe.get(position).getId()){
                 case 1:
                     holder.mRecipeImage.setImageResource(R.drawable.nutella_pie);

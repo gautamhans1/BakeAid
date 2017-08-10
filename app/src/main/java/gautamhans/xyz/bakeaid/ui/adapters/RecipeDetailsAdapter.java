@@ -61,6 +61,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
 
         @BindView(R.id.step_desc)
         TextView mStepDescriptionView;
+
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

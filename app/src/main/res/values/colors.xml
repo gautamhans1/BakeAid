@@ -19,4 +19,6 @@
     <color name="card_detailing">#eee</color>
 
     <color name="widgetBg">#616161</color>
+
+    <color name="cardViewSelectedBg">#BFBCB0</color>
 </resources>

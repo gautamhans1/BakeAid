@@ -23,7 +23,6 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -43,7 +42,9 @@ import gautamhans.xyz.bakeaid.ui.RecipeDetailsActivity;
  * Created by Gautam on 08-Aug-17.
  */
 
-public class RecipeStepFragment extends Fragment{
+public class RecipeStepFragment extends Fragment {
+
+//    static final String STEP_DESCRIPTION = "STEP_DESCRIPTION";
     private static MediaSessionCompat mMediaSession;
     ArrayList<Recipe> mRecipe;
     String recipeName;
@@ -55,6 +56,7 @@ public class RecipeStepFragment extends Fragment{
     Button mPreviousStep;
     @BindView(R.id.nextStep)
     Button mNextStep;
+//    private String stepDescriptionText;
     private SimpleExoPlayer mExoPlayer;
     private PlaybackStateCompat.Builder mStateBuilder;
     private ArrayList<Step> mStep;
@@ -76,9 +78,6 @@ public class RecipeStepFragment extends Fragment{
         mRecipe = new ArrayList<>();
 
         mStepNextPrevListener = (RecipeDetailsActivity) getActivity();
-
-//        initializeMediaSession();
-
 
         if (savedInstanceState != null) {
             mStep = savedInstanceState.getParcelableArrayList(RecipeDetailsActivity.SELECTED_STEPS);
@@ -114,10 +113,20 @@ public class RecipeStepFragment extends Fragment{
             mPlayerView.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
         }
 
-
         setupClickListeners();
 
         return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     private void setupClickListeners() {
@@ -167,9 +176,6 @@ public class RecipeStepFragment extends Fragment{
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
             mPlayerView.setPlayer(mExoPlayer);
 
-            // Set the ExoPlayer.EventListener to this activity.
-//            mExoPlayer.addListener(this);
-
             String userAgent = Util.getUserAgent(getActivity(), "Bake Aid");
             MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
@@ -179,35 +185,6 @@ public class RecipeStepFragment extends Fragment{
         }
     }
 
-
-//    private void initializeMediaSession() {
-//
-//        // Create a MediaSessionCompat.
-//        mMediaSession = new MediaSessionCompat(getActivity(), RecipeDetailsActivity.class.getSimpleName());
-//
-//        // Enable callbacks from MediaButtons and TransportControls.
-//        mMediaSession.setFlags(
-//                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-//                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-//
-//        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
-//        mStateBuilder = new PlaybackStateCompat.Builder()
-//                .setActions(
-//                        PlaybackStateCompat.ACTION_PLAY |
-//                                PlaybackStateCompat.ACTION_PAUSE |
-//                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-//                                PlaybackStateCompat.ACTION_PLAY_PAUSE |
-//                                PlaybackState.ACTION_SKIP_TO_NEXT);
-//
-//        mMediaSession.setPlaybackState(mStateBuilder.build());
-//
-//        // MySessionCallback has methods that handle callbacks from a media controller.
-//        mMediaSession.setCallback(new MySessionCallback());
-//
-//        // Start the Media Session since the activity is active.
-//        mMediaSession.setActive(true);
-//
-//    }
 
     private void releasePlayer() {
         if (mExoPlayer != null) {
@@ -223,47 +200,6 @@ public class RecipeStepFragment extends Fragment{
         releasePlayer();
     }
 
-//    @Override
-//    public void onTimelineChanged(Timeline timeline, Object manifest) {
-//
-//    }
-
-//    @Override
-//    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-//
-//    }
-//
-//    @Override
-//    public void onLoadingChanged(boolean isLoading) {
-//
-//    }
-//
-//    @Override
-//    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-//            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-//                    mExoPlayer.getCurrentPosition(), 1f);
-//        } else if ((playbackState == ExoPlayer.STATE_READY)) {
-//            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-//                    mExoPlayer.getCurrentPosition(), 1f);
-//        }
-//        mMediaSession.setPlaybackState(mStateBuilder.build());
-//    }
-//
-//    @Override
-//    public void onPlayerError(ExoPlaybackException error) {
-//
-//    }
-//
-//    @Override
-//    public void onPositionDiscontinuity() {
-//
-//    }
-//
-//    @Override
-//    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-//
-//    }
 
     @Override
     public void onPause() {
@@ -292,25 +228,4 @@ public class RecipeStepFragment extends Fragment{
         void onStepClick(List<Step> steps, int index, String recipeName);
     }
 
-//    private class MySessionCallback extends MediaSessionCompat.Callback {
-//        @Override
-//        public void onPlay() {
-//            mExoPlayer.setPlayWhenReady(true);
-//        }
-//
-//        @Override
-//        public void onPause() {
-//            mExoPlayer.setPlayWhenReady(false);
-//        }
-//
-//        @Override
-//        public void onSkipToPrevious() {
-//            mExoPlayer.seekTo(0);
-//        }
-//
-//        @Override
-//        public void onSkipToNext() {
-//            mNextStep.performClick();
-//        }
-//    }
 }
