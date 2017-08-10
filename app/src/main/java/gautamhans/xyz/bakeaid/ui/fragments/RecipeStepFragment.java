@@ -299,4 +299,25 @@ public class RecipeStepFragment extends Fragment implements ExoPlayer.EventListe
             mNextStep.performClick();
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mExoPlayer.stop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resumePlayback();
+    }
+
+    private void resumePlayback(){
+        if(mExoPlayer!=null){
+            int playbackState = mExoPlayer.getPlaybackState();
+            if(playbackState == ExoPlayer.STATE_READY){
+                mExoPlayer.setPlayWhenReady(true);
+            }
+        }
+    }
 }

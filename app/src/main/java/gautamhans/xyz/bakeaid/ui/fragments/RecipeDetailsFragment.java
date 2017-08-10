@@ -26,6 +26,7 @@ import gautamhans.xyz.bakeaid.pojos.Recipe;
 import gautamhans.xyz.bakeaid.ui.RecipeActivity;
 import gautamhans.xyz.bakeaid.ui.RecipeDetailsActivity;
 import gautamhans.xyz.bakeaid.ui.adapters.RecipeDetailsAdapter;
+import gautamhans.xyz.bakeaid.utils.WidgetStateChecker;
 import gautamhans.xyz.bakeaid.widget.WidgetUpdateService;
 
 /**
@@ -52,6 +53,7 @@ public class RecipeDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recipe_details_fragment, container, false);
         ButterKnife.bind(this, rootView);
+        WidgetStateChecker.setWidgetState("detail");
 
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.expandaleLayout);
         mExpandButton = (RelativeLayout) rootView.findViewById(R.id.expand_button);
