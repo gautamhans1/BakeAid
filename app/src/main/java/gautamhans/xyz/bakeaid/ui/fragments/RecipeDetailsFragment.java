@@ -4,13 +4,11 @@ import android.animation.ObjectAnimator;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -72,7 +70,6 @@ public class RecipeDetailsFragment extends Fragment {
             mRecipe = getArguments().getParcelableArrayList(RecipeActivity.RECIPE_SEL);
         }
 
-
         addIngredients();
         addSteps();
 
@@ -111,22 +108,22 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void addIngredients() {
         WidgetStateChecker.setWidgetState("detail");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        int recipeId = sharedPreferences.getInt(RecipeActivity.RECIPE_ID, 0);
+
         List<Ingredient> ingredients = mRecipe.get(0).getIngredients();
         recipeName = mRecipe.get(0).getName();
 
         ArrayList<String> ingredientsWidget = new ArrayList<>();
+        ingredientsWidget.clear();
 
         for (int i = 0; i < ingredients.size(); i++) {
             mIngredientsView.append(" --- " + ingredients.get(i).getIngredient() + "\n");
             mIngredientsView.append("\t\t\tQuantity: " + ingredients.get(i).getQuantity().toString() + " " + ingredients.get(i).getMeasure() + "\n");
 
+            System.out.println(ingredients.get(i).getIngredient());
             ingredientsWidget.add(ingredients.get(i).getIngredient() + "\n" + "Quantity: " + ingredients.get(i).getQuantity() + " " + ingredients.get(i).getMeasure() + "\n");
         }
 
-        WidgetUpdateService.startBakingAidService(getContext(), ingredientsWidget);
-
+        WidgetUpdateService.startBakingAidService(getActivity(), ingredientsWidget);
     }
 
     private void addSteps() {

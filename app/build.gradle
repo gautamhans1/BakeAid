@@ -55,6 +55,9 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.github.bumptech.glide:glide:4.0.0'
 
+    // Timber - Logging
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
     // debug
     debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
 

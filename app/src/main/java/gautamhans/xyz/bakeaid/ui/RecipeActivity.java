@@ -1,29 +1,28 @@
 package gautamhans.xyz.bakeaid.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
-import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
-import gautamhans.xyz.bakeaid.IdlingResource.SimpleIdlingResource;
-import gautamhans.xyz.bakeaid.utils.WidgetStateChecker;
-import gautamhans.xyz.bakeaid.widget.WidgetUpdateService;
-import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
-import java.util.List;
 
+import gautamhans.xyz.bakeaid.IdlingResource.SimpleIdlingResource;
 import gautamhans.xyz.bakeaid.R;
+import gautamhans.xyz.bakeaid.pojos.Ingredient;
 import gautamhans.xyz.bakeaid.pojos.Recipe;
 import gautamhans.xyz.bakeaid.ui.adapters.RecipeAdapter;
+import gautamhans.xyz.bakeaid.utils.WidgetStateChecker;
+import gautamhans.xyz.bakeaid.widget.BakingAidWidgetProvider;
+import io.fabric.sdk.android.Fabric;
 
 public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.RecipeClickListener {
 
@@ -37,7 +36,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.R
 
     @VisibleForTesting
     @Nullable
-    public IdlingResource getIdlingResource(){
+    public IdlingResource getIdlingResource() {
         if (mIdlingResource == null) {
             mIdlingResource = new SimpleIdlingResource();
         }
@@ -56,6 +55,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.R
     public void onRecipeClick(Recipe clickedIndex) {
         Bundle bundle = new Bundle();
         ArrayList<Recipe> selectedRecipeData = new ArrayList<>();
+        selectedRecipeData.clear();
         selectedRecipeData.add(clickedIndex);
         bundle.putParcelableArrayList(RECIPE_SEL, selectedRecipeData);
 
@@ -71,13 +71,11 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.R
 
     @Override
     protected void onResume() {
-        super.onResume();
 
         WidgetStateChecker.setWidgetState("main");
-
-        List<String> list = new ArrayList<>();
-        list.add(0, getString(R.string.recipe_ingredients_widget_not_found_description));
-
-        WidgetUpdateService.startBakingAidService(this, (ArrayList<String>) list);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakingAidWidgetProvider.class));
+        BakingAidWidgetProvider.updateBakingAidWidget(this, appWidgetManager, appWidgetIds);
+        super.onResume();
     }
 }
