@@ -44,8 +44,11 @@ import gautamhans.xyz.bakeaid.ui.RecipeDetailsActivity;
 
 public class RecipeStepFragment extends Fragment {
 
-//    static final String STEP_DESCRIPTION = "STEP_DESCRIPTION";
+    static final String PLAYER_CURRENT_LOCATION = "PLAYER_CURRENT_LOCATION";
+    //    static final String STEP_DESCRIPTION = "STEP_DESCRIPTION";
     private static MediaSessionCompat mMediaSession;
+    long currentPosition;
+
     ArrayList<Recipe> mRecipe;
     String recipeName;
     @BindView(R.id.playerView)
@@ -56,7 +59,7 @@ public class RecipeStepFragment extends Fragment {
     Button mPreviousStep;
     @BindView(R.id.nextStep)
     Button mNextStep;
-//    private String stepDescriptionText;
+    //    private String stepDescriptionText;
     private SimpleExoPlayer mExoPlayer;
     private PlaybackStateCompat.Builder mStateBuilder;
     private ArrayList<Step> mStep;
@@ -127,6 +130,12 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (mExoPlayer != null) {
+                currentPosition = savedInstanceState.getLong(PLAYER_CURRENT_LOCATION);
+                mExoPlayer.seekTo(currentPosition);
+            }
+        }
     }
 
     private void setupClickListeners() {
@@ -167,6 +176,7 @@ public class RecipeStepFragment extends Fragment {
         outState.putParcelableArrayList(RecipeDetailsActivity.SELECTED_STEPS, mStep);
         outState.putInt(RecipeDetailsActivity.SELECTED_INDEX, selectedIndex);
         outState.putString(RecipeDetailsActivity.RECIPE_TITLE, recipeName);
+        outState.putLong(PLAYER_CURRENT_LOCATION, mExoPlayer.getCurrentPosition());
     }
 
     private void initializeExoPlayer(Uri uri) {
