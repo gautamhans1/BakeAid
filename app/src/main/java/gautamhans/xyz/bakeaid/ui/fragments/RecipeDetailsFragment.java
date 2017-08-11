@@ -60,6 +60,8 @@ public class RecipeDetailsFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         WidgetStateChecker.setWidgetState("detail");
 
+        ((RecipeDetailsActivity)getActivity()).getSupportActionBar().show();
+
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.expandaleLayout);
         mExpandButton = (RelativeLayout) rootView.findViewById(R.id.expand_button);
         mLinearLayout.setVisibility(View.GONE);

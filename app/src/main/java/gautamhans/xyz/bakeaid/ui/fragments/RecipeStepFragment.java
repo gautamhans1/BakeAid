@@ -7,14 +7,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -37,6 +40,7 @@ import gautamhans.xyz.bakeaid.pojos.Recipe;
 import gautamhans.xyz.bakeaid.pojos.Step;
 import gautamhans.xyz.bakeaid.ui.RecipeActivity;
 import gautamhans.xyz.bakeaid.ui.RecipeDetailsActivity;
+import timber.log.Timber;
 
 /**
  * Created by Gautam on 08-Aug-17.
@@ -49,6 +53,8 @@ public class RecipeStepFragment extends Fragment {
     private static MediaSessionCompat mMediaSession;
     long currentPosition;
 
+    @BindView(R.id.thumbNail)
+    ImageView thumbnailView;
     ArrayList<Recipe> mRecipe;
     String recipeName;
     @BindView(R.id.playerView)
@@ -65,6 +71,7 @@ public class RecipeStepFragment extends Fragment {
     private ArrayList<Step> mStep;
     private int selectedIndex;
     private String mVideoUrl;
+    private String mThumbnailUrl;
     private StepNextPrevListener mStepNextPrevListener;
 
     public RecipeStepFragment() {
@@ -100,16 +107,39 @@ public class RecipeStepFragment extends Fragment {
 
         stepDescription.setText("Description: \n\n" + mStep.get(selectedIndex).getDescription());
         mVideoUrl = mStep.get(selectedIndex).getVideoURL();
+        mThumbnailUrl = mStep.get(selectedIndex).getThumbnailURL();
 
+
+        if (rootView.getTag() != null && rootView.getTag().equals("landscape")) {
+            Log.d("Landscape Mode: ", "True");
+            if (!mVideoUrl.isEmpty()) {
+                Timber.d("Landscape mode");
+                ((RecipeDetailsActivity) getActivity()).getSupportActionBar().hide();
+            } else {
+                ((RecipeDetailsActivity) getActivity()).getSupportActionBar().show();
+            }
+        } else {
+            Log.d("Landscape Mode: ", "False");
+        }
 
         if (!mVideoUrl.isEmpty()) {
             Uri videoUri = Uri.parse(mVideoUrl);
             initializeExoPlayer(videoUri);
 
-            if (rootView.getTag() != null && rootView.getTag() == "landscape") {
-
+        } else if (!mThumbnailUrl.isEmpty()) {
+            if (mThumbnailUrl.length() > 4) {
+                String format = mThumbnailUrl.substring(mThumbnailUrl.length() - 4);
+                if (format.equals(".mp4")) {
+                    Uri videoUri = Uri.parse(mThumbnailUrl);
+                    if (rootView.getTag() != null && rootView.getTag().equals("landscape")) {
+                        ((RecipeDetailsActivity) getActivity()).getSupportActionBar().hide();
+                    }
+                    initializeExoPlayer(videoUri);
+                } else {
+                    Uri thumbnailUri = Uri.parse(mThumbnailUrl).buildUpon().build();
+                    Glide.with(getContext()).load(thumbnailUri).into(thumbnailView);
+                }
             }
-
         } else {
             mExoPlayer = null;
             mPlayerView.setForeground(ContextCompat.getDrawable(getContext(), R.drawable.no_video));
@@ -124,7 +154,8 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        releasePlayer();
+        if (mExoPlayer != null)
+            releasePlayer();
     }
 
     @Override
@@ -173,10 +204,11 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.d("State: ", "onSaveInstanceState()");
         outState.putParcelableArrayList(RecipeDetailsActivity.SELECTED_STEPS, mStep);
         outState.putInt(RecipeDetailsActivity.SELECTED_INDEX, selectedIndex);
         outState.putString(RecipeDetailsActivity.RECIPE_TITLE, recipeName);
-        outState.putLong(PLAYER_CURRENT_LOCATION, mExoPlayer.getCurrentPosition());
+        outState.putLong(PLAYER_CURRENT_LOCATION, currentPosition);
     }
 
     private void initializeExoPlayer(Uri uri) {
@@ -214,8 +246,10 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("State: ", "onPause()");
         if (mExoPlayer != null) {
-            mExoPlayer.stop();
+            currentPosition = mExoPlayer.getCurrentPosition();
+            releasePlayer();
         }
     }
 
