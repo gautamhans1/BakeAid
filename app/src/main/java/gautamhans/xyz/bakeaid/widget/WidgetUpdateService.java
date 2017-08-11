@@ -38,11 +38,9 @@ public class WidgetUpdateService extends IntentService {
     }
 
     private void handleActionUpdateWidget(ArrayList<String> ingredientsList){
-        Intent intent = new Intent("android.appwidget.action.APPWIDGET_UPDATE2");
-        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE2");
+        Intent intent = new Intent("android.appwidget.action.APPWIDGET_UPDATE");
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
         intent.putExtra(INGREDIENTS_LIST, ingredientsList);
         sendBroadcast(intent);
     }
-
-
 }

@@ -1,5 +1,7 @@
 package gautamhans.xyz.bakeaid.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +19,7 @@ import gautamhans.xyz.bakeaid.ui.adapters.RecipeDetailsAdapter;
 import gautamhans.xyz.bakeaid.ui.fragments.RecipeDetailsFragment;
 import gautamhans.xyz.bakeaid.ui.fragments.RecipeStepFragment;
 import gautamhans.xyz.bakeaid.utils.WidgetStateChecker;
+import gautamhans.xyz.bakeaid.widget.BakingAidWidgetProvider;
 
 /**
  * Created by Gautam on 06-Aug-17.
@@ -128,4 +131,5 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         f.setArguments(bundle);
         return f;
     }
+
 }

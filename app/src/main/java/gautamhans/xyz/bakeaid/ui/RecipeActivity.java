@@ -64,6 +64,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeAdapter.R
         editor.putInt(RECIPE_ID, clickedIndex.getId());
         editor.apply();
 
+
         final Intent intent = new Intent(this, RecipeDetailsActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

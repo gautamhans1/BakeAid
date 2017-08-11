@@ -17,7 +17,6 @@ public class WidgetGridService extends RemoteViewsService {
 
     List<String> remoteViewIngredients;
 
-
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new GridRemoteViewsFactory(this.getApplicationContext(), intent);
