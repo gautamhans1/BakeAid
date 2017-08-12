@@ -1,7 +1,6 @@
 package gautamhans.xyz.bakeaid.ui.fragments;
 
 import android.animation.ObjectAnimator;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ public class RecipeDetailsFragment extends Fragment {
     static String RECIPE_NAME = "recipe_name";
     static String RECYCLER_VIEW_STATE_KEY = "RECYCLER_VIEW_STATE_KEY";
     static String INGREDIENTS_STATE = "INGREDIENTS_STATE";
+    static String SCROLLVIEW_STATE = "SCROLLVIEW_STATE";
     static boolean isExpanded = false;
     ArrayList<Recipe> mRecipe;
     String recipeName;
@@ -52,6 +53,8 @@ public class RecipeDetailsFragment extends Fragment {
     RelativeLayout ingredientsLayout;
     LinearLayoutManager mLayoutManager;
     Parcelable mListState;
+    @BindView(R.id.recipeDetailsScrollView)
+    ScrollView mScrollView;
 
     @Nullable
     @Override
@@ -60,7 +63,7 @@ public class RecipeDetailsFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         WidgetStateChecker.setWidgetState("detail");
 
-        ((RecipeDetailsActivity)getActivity()).getSupportActionBar().show();
+        ((RecipeDetailsActivity) getActivity()).getSupportActionBar().show();
 
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.expandaleLayout);
         mExpandButton = (RelativeLayout) rootView.findViewById(R.id.expand_button);
@@ -105,6 +108,25 @@ public class RecipeDetailsFragment extends Fragment {
             } else {
                 mLinearLayout.setVisibility(View.GONE);
             }
+            final int[] scrollPosition = savedInstanceState.getIntArray(SCROLLVIEW_STATE);
+            if (scrollPosition != null) {
+                mScrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScrollView.scrollTo(scrollPosition[0], scrollPosition[1]);
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isExpanded) {
+            mLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            mLinearLayout.setVisibility(View.GONE);
         }
     }
 
@@ -144,6 +166,9 @@ public class RecipeDetailsFragment extends Fragment {
         mListState = mLayoutManager.onSaveInstanceState();
         outState.putParcelable(RECYCLER_VIEW_STATE_KEY, mListState);
         outState.putBoolean(INGREDIENTS_STATE, isExpanded);
+        outState.putIntArray(SCROLLVIEW_STATE, new int[]{
+                mScrollView.getScrollX(), mScrollView.getScrollY()
+        });
     }
 
     private void onClickButton(final LinearLayout expandableLayout, final RelativeLayout button) {

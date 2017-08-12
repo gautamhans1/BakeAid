@@ -9,4 +9,6 @@
     <string name="recipe_ingredients_widget_not_found_description">Recipe ingredients will be shown here once you open a recipe in the application.</string>
     <string name="playervideo_cd">playerVideo</string>
     <string name="no_video">No Video</string>
+    <string name="no_internet_connection_error_text">No internet connection found. Please connect and try again.</string>
+    <string name="refresh_button_text">Refresh</string>
 </resources>

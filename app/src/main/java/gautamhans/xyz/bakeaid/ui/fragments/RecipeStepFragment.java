@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -51,7 +50,7 @@ public class RecipeStepFragment extends Fragment {
     static final String PLAYER_CURRENT_LOCATION = "PLAYER_CURRENT_LOCATION";
     //    static final String STEP_DESCRIPTION = "STEP_DESCRIPTION";
     private static MediaSessionCompat mMediaSession;
-    long currentPosition;
+    long currentPosition = 0;
 
     @BindView(R.id.thumbNail)
     ImageView thumbnailView;
@@ -222,7 +221,11 @@ public class RecipeStepFragment extends Fragment {
             MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
 
+
             mExoPlayer.prepare(mediaSource);
+            if(currentPosition!=0){
+                mExoPlayer.seekTo(currentPosition);
+            }
             mExoPlayer.setPlayWhenReady(true);
         }
     }
@@ -256,16 +259,6 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        resumePlayback();
-    }
-
-    private void resumePlayback() {
-        if (mExoPlayer != null) {
-            int playbackState = mExoPlayer.getPlaybackState();
-            if (playbackState == ExoPlayer.STATE_READY) {
-                mExoPlayer.setPlayWhenReady(true);
-            }
-        }
     }
 
     public interface StepNextPrevListener {

@@ -3,6 +3,7 @@ package gautamhans.xyz.bakeaid.ui.adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +25,11 @@ import gautamhans.xyz.bakeaid.pojos.Recipe;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
+    final private RecipeClickListener mRecipeClickListener;
     private ArrayList<Recipe> mRecipe;
     private Context mContext;
-    final private RecipeClickListener mRecipeClickListener;
 
-    public interface RecipeClickListener{
-        void onRecipeClick(Recipe clickedIndex);
-    }
-
-    public RecipeAdapter(ArrayList<Recipe> mRecipe, Context mContext,RecipeClickListener mRecipeClickListener) {
+    public RecipeAdapter(ArrayList<Recipe> mRecipe, Context mContext, RecipeClickListener mRecipeClickListener) {
         this.mRecipe = mRecipe;
         this.mContext = mContext;
         this.mRecipeClickListener = mRecipeClickListener;
@@ -49,11 +46,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.mRecipeName.setText(mRecipe.get(position).getName());
 
         String imageUrl = mRecipe.get(position).getImage();
-        if (!imageUrl.equals("")) {
+        if (!TextUtils.isEmpty(imageUrl)) {
             Uri uri = Uri.parse(imageUrl).buildUpon().build();
             Glide.with(mContext).load(uri).into(holder.mRecipeImage);
         } else {
-            switch (mRecipe.get(position).getId()){
+            switch (mRecipe.get(position).getId()) {
                 case 1:
                     holder.mRecipeImage.setImageResource(R.drawable.nutella_pie);
                     break;
@@ -74,7 +71,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mRecipe!=null ? mRecipe.size() : 0;
+        return mRecipe != null ? mRecipe.size() : 0;
+    }
+
+    public interface RecipeClickListener {
+        void onRecipeClick(Recipe clickedIndex);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -83,18 +84,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         TextView mRecipeName;
         @BindView(R.id.recipe_image)
         ImageView mRecipeImage;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(listener);
-        }
-
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mRecipeClickListener.onRecipeClick(mRecipe.get(getAdapterPosition()));
             }
         };
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(listener);
+        }
     }
 }

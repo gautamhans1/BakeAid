@@ -1,5 +1,8 @@
 package gautamhans.xyz.bakeaid.ui.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -10,12 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import gautamhans.xyz.bakeaid.IdlingResource.SimpleIdlingResource;
 import gautamhans.xyz.bakeaid.R;
 import gautamhans.xyz.bakeaid.pojos.Recipe;
@@ -38,6 +45,11 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
     static final String RECYLER_VIEW_STATE = "RECYLER_VIEW_STATE";
     boolean isPortrait = true;
 
+    Toast mToast;
+    @BindView(R.id.refreshButton)
+    Button mRefreshButton;
+    @BindView(R.id.errorTextView)
+    TextView mErrorTextView;
     Parcelable mListState;
     @BindView(R.id.rv_recipes)
     RecyclerView mRecyclerView;
@@ -76,15 +88,19 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
             idlingResource.setIdleState(false);
         }
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             recipes = savedInstanceState.getParcelableArrayList(RECIPES_SAVED);
             mRecipeAdapter = new RecipeAdapter(recipes, getActivity(), (RecipeActivity) getActivity());
             mRecyclerView.setAdapter(mRecipeAdapter);
             mListState = savedInstanceState.getParcelable(RECYLER_VIEW_STATE);
-            if(isPortrait) mLinearLayoutManager.onRestoreInstanceState(mListState);
+            if (isPortrait) mLinearLayoutManager.onRestoreInstanceState(mListState);
             else mGridLayoutManager.onRestoreInstanceState(mListState);
         } else {
-            loadRecipes();
+            if (isNetworkAvailable()) {
+                loadRecipes();
+            } else {
+                showError();
+            }
         }
 
         return rootView;
@@ -96,6 +112,9 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
 
         Call<ArrayList<Recipe>> recipes = mRecipesAPI.getRecipes();
 
+        mErrorTextView.setVisibility(View.GONE);
+        mRefreshButton.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
         recipes.enqueue(new Callback<ArrayList<Recipe>>() {
             @Override
@@ -117,6 +136,11 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
                 Log.d("Retrofit Error: ", t.getMessage());
+
+                if (mToast != null) mToast.cancel();
+                mToast = Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG);
+                mToast.show();
+
                 t.printStackTrace();
             }
         });
@@ -138,4 +162,32 @@ public class RecipeFragment extends android.support.v4.app.Fragment {
             outState.putParcelable(RECYLER_VIEW_STATE, mListState);
         }
     }
+
+    // Check for internet connectivity
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void showError() {
+        mRecyclerView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mErrorTextView.setVisibility(View.VISIBLE);
+        mRefreshButton.setVisibility(View.VISIBLE);
+        if (mToast != null) mToast.cancel();
+        mToast = Toast.makeText(getContext(), "Please connect to internet and try again.", Toast.LENGTH_LONG);
+        mToast.show();
+    }
+
+    @OnClick(R.id.refreshButton)
+    public void refreshRecipes() {
+        if (isNetworkAvailable()) {
+            loadRecipes();
+        } else {
+            showError();
+        }
+    }
+
 }

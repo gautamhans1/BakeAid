@@ -1,21 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_recipes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <ProgressBar
         android:id="@+id/recipe_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/no_internet_connection_error_text"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_marginStart="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/MyButton"
+        android:text="@string/refresh_button_text"
+        android:textColor="@color/white"
+        android:layout_marginEnd="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>
