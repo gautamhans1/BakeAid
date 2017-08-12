@@ -2,6 +2,7 @@ package gautamhans.xyz.bakeaid.ui.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -48,10 +49,10 @@ import timber.log.Timber;
 public class RecipeStepFragment extends Fragment {
 
     static final String PLAYER_CURRENT_LOCATION = "PLAYER_CURRENT_LOCATION";
+    static final String PLAYER_URI = "PLAYER_URI";
     //    static final String STEP_DESCRIPTION = "STEP_DESCRIPTION";
     private static MediaSessionCompat mMediaSession;
     long currentPosition = 0;
-
     @BindView(R.id.thumbNail)
     ImageView thumbnailView;
     ArrayList<Recipe> mRecipe;
@@ -64,6 +65,7 @@ public class RecipeStepFragment extends Fragment {
     Button mPreviousStep;
     @BindView(R.id.nextStep)
     Button mNextStep;
+    private Uri mediaUri;
     //    private String stepDescriptionText;
     private SimpleExoPlayer mExoPlayer;
     private PlaybackStateCompat.Builder mStateBuilder;
@@ -123,7 +125,8 @@ public class RecipeStepFragment extends Fragment {
 
         if (!mVideoUrl.isEmpty()) {
             Uri videoUri = Uri.parse(mVideoUrl);
-            initializeExoPlayer(videoUri);
+            mediaUri = videoUri;
+            initializeExoPlayer();
 
         } else if (!mThumbnailUrl.isEmpty()) {
             if (mThumbnailUrl.length() > 4) {
@@ -133,7 +136,8 @@ public class RecipeStepFragment extends Fragment {
                     if (rootView.getTag() != null && rootView.getTag().equals("landscape")) {
                         ((RecipeDetailsActivity) getActivity()).getSupportActionBar().hide();
                     }
-                    initializeExoPlayer(videoUri);
+                    mediaUri = videoUri;
+                    initializeExoPlayer();
                 } else {
                     Uri thumbnailUri = Uri.parse(mThumbnailUrl).buildUpon().build();
                     Glide.with(getContext()).load(thumbnailUri).into(thumbnailView);
@@ -164,6 +168,7 @@ public class RecipeStepFragment extends Fragment {
             if (mExoPlayer != null) {
                 currentPosition = savedInstanceState.getLong(PLAYER_CURRENT_LOCATION);
                 mExoPlayer.seekTo(currentPosition);
+                mediaUri = Uri.parse(savedInstanceState.getString(PLAYER_URI));
             }
         }
     }
@@ -208,9 +213,13 @@ public class RecipeStepFragment extends Fragment {
         outState.putInt(RecipeDetailsActivity.SELECTED_INDEX, selectedIndex);
         outState.putString(RecipeDetailsActivity.RECIPE_TITLE, recipeName);
         outState.putLong(PLAYER_CURRENT_LOCATION, currentPosition);
+        if (mediaUri != null) {
+            outState.putString(PLAYER_URI, String.valueOf(mediaUri));
+        }
     }
 
-    private void initializeExoPlayer(Uri uri) {
+    private void initializeExoPlayer() {
+        Uri uri = mediaUri;
         if (mExoPlayer == null) {
             TrackSelector trackSelector = new DefaultTrackSelector();
 
@@ -223,7 +232,7 @@ public class RecipeStepFragment extends Fragment {
 
 
             mExoPlayer.prepare(mediaSource);
-            if(currentPosition!=0){
+            if (currentPosition != 0) {
                 mExoPlayer.seekTo(currentPosition);
             }
             mExoPlayer.setPlayWhenReady(true);
@@ -259,6 +268,7 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        initializeExoPlayer();
     }
 
     public interface StepNextPrevListener {
