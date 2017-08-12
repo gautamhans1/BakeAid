@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:tag="tablet-landscape"
-    android:padding="8dp">
+    android:padding="@dimen/activity_recipe_padding"
+    android:tag="tablet-landscape">
 
     <FrameLayout
         android:id="@+id/fragment_container"
-        android:layout_width="250dp"
+        android:layout_width="@dimen/ingredients_container_width_master_flow"
         android:layout_height="match_parent"
         android:scaleType="centerInside" />
 
@@ -17,7 +17,7 @@
         android:id="@+id/fragment_container_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/video_container_master_flow_margin"
         android:scaleType="centerInside" />
 
 </LinearLayout>

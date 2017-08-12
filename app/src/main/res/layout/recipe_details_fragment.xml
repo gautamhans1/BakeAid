@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recipeDetailsScrollView"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipeDetailsScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/details_frag_ll_margin"
         android:orientation="vertical">
 
         <android.support.v7.widget.CardView
             android:id="@+id/ingredients_cv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp">
+            android:layout_margin="@dimen/ingredients_card_margin"
+            app:cardCornerRadius="@dimen/ingredients_card_corner_radius"
+            app:cardElevation="@dimen/ingredients_card_card_elevation">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="@dimen/ingredients_card_ll_margin"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/ingredientsLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                    android:layout_height="@dimen/ingredients_card_rl_height">
 
                     <TextView
                         android:id="@+id/ingredients_tv_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/ingredients"
-                        android:textSize="22sp"
+                        android:textSize="@dimen/ingredients_card_ingredients_rv_text_size"
                         tools:text="Ingedients" />
 
                     <RelativeLayout
                         android:id="@+id/expand_button"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="@dimen/ingredients_card_expand_button_width"
+                        android:layout_height="@dimen/ingredients_card_expand_button_height"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true">
 
                         <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
+                            android:layout_width="@dimen/ingredients_card_expand_view_width"
+                            android:layout_height="@dimen/ingredients_card_expand_view_height"
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentStart="true"
@@ -64,13 +64,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="@dimen/expandable_view_padding">
 
                     <TextView
                         android:id="@+id/ingredients_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/ingredients_card_ingredients_text_size" />
 
                 </LinearLayout>
 
@@ -82,8 +82,8 @@
             android:id="@+id/rv_steps"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="@dimen/recipe_steps_rv_margin_bottom"
+            android:layout_marginTop="@dimen/recipe_steps_rv_margin_top" />
 
     </LinearLayout>
 </ScrollView>

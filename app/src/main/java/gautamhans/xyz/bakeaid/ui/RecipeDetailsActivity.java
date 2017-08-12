@@ -1,7 +1,5 @@
 package gautamhans.xyz.bakeaid.ui;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +17,6 @@ import gautamhans.xyz.bakeaid.ui.adapters.RecipeDetailsAdapter;
 import gautamhans.xyz.bakeaid.ui.fragments.RecipeDetailsFragment;
 import gautamhans.xyz.bakeaid.ui.fragments.RecipeStepFragment;
 import gautamhans.xyz.bakeaid.utils.WidgetStateChecker;
-import gautamhans.xyz.bakeaid.widget.BakingAidWidgetProvider;
 
 /**
  * Created by Gautam on 06-Aug-17.
@@ -35,6 +32,23 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
     private ActionBar mActionBar;
     private Bundle bundle;
 
+    public static RecipeDetailsFragment newInstance(Bundle bundle) {
+        RecipeDetailsFragment f = new RecipeDetailsFragment();
+        f.setArguments(bundle);
+        return f;
+    }
+
+    public static RecipeStepFragment newStepInstance(List<Step> stepOut, int clickedStepIndex, String recipeName) {
+        RecipeStepFragment f = new RecipeStepFragment();
+        ArrayList<Step> mStep = (ArrayList<Step>) stepOut;
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(SELECTED_STEPS, mStep);
+        bundle.putInt(SELECTED_INDEX, clickedStepIndex);
+        bundle.putString(RECIPE_TITLE, recipeName);
+        f.setArguments(bundle);
+        return f;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +59,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         if (savedInstanceState == null) {
 
             if (getIntent() != null) {
-                    bundle = getIntent().getExtras();
-                    mRecipe = new ArrayList<>();
-                    mRecipe = bundle.getParcelableArrayList(RecipeActivity.RECIPE_SEL);
-                    recipeName = mRecipe.get(0).getName();
+                bundle = getIntent().getExtras();
+                mRecipe = new ArrayList<>();
+                mRecipe = bundle.getParcelableArrayList(RecipeActivity.RECIPE_SEL);
+                recipeName = mRecipe.get(0).getName();
             }
 
             RecipeDetailsFragment recipeDetailsFragment = newInstance(bundle);
@@ -78,14 +92,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
 
 
     }
-
-    public static RecipeDetailsFragment newInstance(Bundle bundle) {
-        RecipeDetailsFragment f = new RecipeDetailsFragment();
-        f.setArguments(bundle);
-        return f;
-    }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -119,17 +125,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
                     .addToBackStack(RECIPE_DETAIL_STACK)
                     .commit();
         }
-    }
-
-    public static RecipeStepFragment newStepInstance(List<Step> stepOut, int clickedStepIndex, String recipeName){
-        RecipeStepFragment f = new RecipeStepFragment();
-        ArrayList<Step> mStep = (ArrayList<Step>) stepOut;
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(SELECTED_STEPS, mStep);
-        bundle.putInt(SELECTED_INDEX, clickedStepIndex);
-        bundle.putString(RECIPE_TITLE, recipeName);
-        f.setArguments(bundle);
-        return f;
     }
 
 }

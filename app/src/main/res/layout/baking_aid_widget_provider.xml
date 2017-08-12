@@ -6,12 +6,12 @@
 
     <TextView
         android:id="@+id/open_app"
-        android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/recipe_ingredients_widget_not_found_description"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textSize="22sp"/>
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/widget_intro_margin"
+        android:text="@string/recipe_ingredients_widget_not_found_description"
+        android:textSize="@dimen/widget_intro_text_size" />
 
 </RelativeLayout>

@@ -41,7 +41,7 @@ public class BakingAidWidgetProvider extends AppWidgetProvider {
             views.setPendingIntentTemplate(R.id.widget_grid_view, pendingIntent);
             appWidgetManager.updateAppWidget(appWidgetId, views);
 
-        } else if (widgetState.equals("detail")){
+        } else if (widgetState.equals("detail")) {
             Intent intent = new Intent(context, RecipeDetailsActivity.class);
             intent.addCategory(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);

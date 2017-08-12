@@ -13,9 +13,9 @@
             android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:contentDescription="playerVideo"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="0dp" />
+            android:layout_margin="0dp"
+            android:contentDescription="playerVideo" />
 
         <ImageView
             android:id="@+id/thumbNail"

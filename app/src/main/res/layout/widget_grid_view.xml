@@ -2,24 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/widgetBg"
-    >
+    android:orientation="vertical">
 
     <TextView
-        android:text="@string/ingredients"
-        android:textSize="18sp"
-        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="@dimen/widget_grid_text_margin_bottom"
+        android:text="@string/ingredients"
+        android:textColor="@color/white"
+        android:textSize="@dimen/widget_grid_ingredients_text_size" />
 
     <GridView
         android:id="@+id/widget_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="30dp"
+        android:columnWidth="@dimen/widget_grid_column_width"
         android:numColumns="2" />
 
 </LinearLayout>

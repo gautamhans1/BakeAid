@@ -7,8 +7,8 @@
     android:layout_alignParentTop="false"
     android:layout_centerHorizontal="false"
     android:layout_gravity="center_horizontal"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="4dp">
+    android:layout_margin="@dimen/recipe_fragment_cv_margin"
+    app:cardCornerRadius="@dimen/recipe_fragment_cv_corner_radius">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/recipe_image"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="@dimen/recipe_image_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:scaleType="fitXY"
@@ -25,7 +25,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="@dimen/recipe_frame_layout_height"
             android:background="@drawable/gradient_bg" />
 
         <TextView
@@ -34,10 +34,10 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/recipe_image"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="12dp"
-            android:layout_marginStart="11dp"
+            android:layout_marginBottom="@dimen/recipe_name_margin_bottom"
+            android:layout_marginStart="@dimen/recipe_name_margin_start"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textSize="@dimen/recipe_name_text_size"
             tools:text="Nutella Pie" />
 
     </RelativeLayout>

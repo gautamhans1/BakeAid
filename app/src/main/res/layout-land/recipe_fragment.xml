@@ -14,33 +14,32 @@
         android:id="@+id/recipe_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/errorTextView"
-        android:layout_width="150dp"
+        android:layout_width="@dimen/error_text_view_width"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/error_text_view_margin_start"
         android:text="@string/no_internet_connection_error_text"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:layout_marginStart="50dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:visibility="gone"
-        />
+        android:textSize="@dimen/error_text_view_size"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/MyButton"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/refresh_button_margin_end"
         android:text="@string/refresh_button_text"
         android:textColor="@color/white"
-        android:layout_marginEnd="50dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:visibility="gone"/>
+        android:theme="@style/MyButton"
+        android:visibility="gone" />
 
 </RelativeLayout>

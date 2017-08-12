@@ -2,23 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/card"
-        >
+        android:background="@drawable/card">
 
         <TextView
             android:id="@+id/widget_grid_view_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/widget_grid_ingredient_padding"
             android:textAlignment="viewStart"
-            android:textSize="12sp"
-            android:padding="5dp"
-            />
+            android:textSize="@dimen/widget_grid_ingredient_text_size" />
 
     </LinearLayout>
 

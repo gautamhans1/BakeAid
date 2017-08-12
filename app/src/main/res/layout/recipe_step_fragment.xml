@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="@dimen/recipe_step_ll_padding">
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/recipe_step_port_height"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="playerVideo"/>
+        android:contentDescription="playerVideo" />
 
     <ImageView
         android:id="@+id/thumbNail"
@@ -22,12 +22,12 @@
         android:id="@+id/stepDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textSize="18sp" />
+        android:layout_margin="@dimen/recipe_description_margin"
+        android:textSize="@dimen/recipe_description_text_size" />
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/recipe_buttons_ll_lh"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 

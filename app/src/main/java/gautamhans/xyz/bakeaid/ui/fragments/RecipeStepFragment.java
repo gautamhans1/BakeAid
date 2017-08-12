@@ -2,7 +2,6 @@ package gautamhans.xyz.bakeaid.ui.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;

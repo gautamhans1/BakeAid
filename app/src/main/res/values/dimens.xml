@@ -6,5 +6,53 @@ Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="activity_recipe_padding">8dp</dimen>
+    <dimen name="ingredients_container_width_master_flow">250dp</dimen>
+    <dimen name="video_container_master_flow_margin">20dp</dimen>
+    <dimen name="widget_intro_margin">20dp</dimen>
+    <dimen name="widget_intro_text_size">22sp</dimen>
+    <dimen name="details_frag_ll_margin">10dp</dimen>
+    <dimen name="ingredients_card_corner_radius">4dp</dimen>
+    <dimen name="ingredients_card_card_elevation">4dp</dimen>
+    <dimen name="ingredients_card_margin">5dp</dimen>
+    <dimen name="ingredients_card_ll_margin">10dp</dimen>
+    <dimen name="ingredients_card_rl_height">30dp</dimen>
+    <dimen name="ingredients_card_ingredients_rv_text_size">22sp</dimen>
+    <dimen name="ingredients_card_expand_button_width">25dp</dimen>
+    <dimen name="ingredients_card_expand_button_height">25dp</dimen>
+    <dimen name="ingredients_card_expand_view_width">12dp</dimen>
+    <dimen name="ingredients_card_expand_view_height">12dp</dimen>
+    <dimen name="ingredients_card_ingredients_text_size">16sp</dimen>
+    <dimen name="recipe_steps_rv_margin_top">10dp</dimen>
+    <dimen name="recipe_steps_rv_margin_bottom">10dp</dimen>
+    <dimen name="expandable_view_padding">10dp</dimen>
+    <dimen name="ingredients_view_landscape_width">200dp</dimen>
+    <dimen name="step_cv_layout_margin">5dp</dimen>
+    <dimen name="step_cv_corner_radius">4dp</dimen>
+    <dimen name="step_cv_card_elevation">4dp</dimen>
+    <dimen name="step_rl_padding">12dp</dimen>
+    <dimen name="step_text_size">18sp</dimen>
+    <dimen name="recipe_fragment_rl_padding">8dp</dimen>
+    <dimen name="error_text_view_width">150dp</dimen>
+    <dimen name="error_text_view_size">18sp</dimen>
+    <dimen name="error_text_view_margin_start">50dp</dimen>
+    <dimen name="refresh_button_margin_end">50dp</dimen>
+    <dimen name="recipe_fragment_cv_margin">5dp</dimen>
+    <dimen name="recipe_fragment_cv_corner_radius">4dp</dimen>
+    <dimen name="recipe_image_height">250dp</dimen>
+    <dimen name="recipe_frame_layout_height">250dp</dimen>
+    <dimen name="recipe_name_margin_bottom">12dp</dimen>
+    <dimen name="recipe_name_margin_start">11dp</dimen>
+    <dimen name="recipe_name_text_size">28sp</dimen>
+    <dimen name="recipe_step_ll_padding">10dp</dimen>
+    <dimen name="recipe_step_port_height">200dp</dimen>
+    <dimen name="recipe_description_margin">10dp</dimen>
+    <dimen name="recipe_description_text_size">18sp</dimen>
+    <dimen name="recipe_buttons_ll_lh">50dp</dimen>
+    <dimen name="widget_grid_ingredients_text_size">18sp</dimen>
+    <dimen name="widget_grid_text_margin_bottom">5dp</dimen>
+    <dimen name="widget_grid_column_width">30dp</dimen>
+    <dimen name="widget_grid_ingredient_text_size">12sp</dimen>
+    <dimen name="widget_grid_ingredient_padding">5dp</dimen>
 
 </resources>

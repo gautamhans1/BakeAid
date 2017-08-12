@@ -32,9 +32,9 @@ public class SimpleIdlingResource implements IdlingResource {
         mCallback = callback;
     }
 
-    public void setIdleState(boolean isIdleNow){
+    public void setIdleState(boolean isIdleNow) {
         mIsIdleNow.set(isIdleNow);
-        if(isIdleNow && mCallback!=null){
+        if (isIdleNow && mCallback != null) {
             mCallback.onTransitionToIdle();
         }
     }

@@ -1,4 +1,3 @@
-
 package gautamhans.xyz.bakeaid.pojos;
 
 import android.os.Parcel;
@@ -10,8 +9,19 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe implements Parcelable{
+public class Recipe implements Parcelable {
 
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -31,7 +41,6 @@ public class Recipe implements Parcelable{
     @Expose
     private String image;
 
-
     protected Recipe(Parcel in) {
         id = in.readByte() == 0x00 ? null : in.readInt();
         name = in.readString();
@@ -50,18 +59,6 @@ public class Recipe implements Parcelable{
         servings = in.readByte() == 0x00 ? null : in.readInt();
         image = in.readString();
     }
-
-    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-        @Override
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
-        }
-
-        @Override
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
 
     public Integer getId() {
         return id;

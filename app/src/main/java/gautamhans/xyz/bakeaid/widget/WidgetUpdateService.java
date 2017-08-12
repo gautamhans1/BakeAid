@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -22,7 +21,7 @@ public class WidgetUpdateService extends IntentService {
         super("WidgetUpdateService");
     }
 
-    public static void startBakingAidService(Context context, ArrayList<String> ingredientsList){
+    public static void startBakingAidService(Context context, ArrayList<String> ingredientsList) {
         Timber.d("Starting Service\nNewData: " + ingredientsList);
         Intent intent = new Intent(context, WidgetUpdateService.class);
         intent.putExtra(INGREDIENTS_LIST, ingredientsList);
@@ -37,7 +36,7 @@ public class WidgetUpdateService extends IntentService {
         }
     }
 
-    private void handleActionUpdateWidget(ArrayList<String> ingredientsList){
+    private void handleActionUpdateWidget(ArrayList<String> ingredientsList) {
         Intent intent = new Intent("android.appwidget.action.APPWIDGET_UPDATE");
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
         intent.putExtra(INGREDIENTS_LIST, ingredientsList);

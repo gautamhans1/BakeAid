@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import gautamhans.xyz.bakeaid.IdlingResource.SimpleIdlingResource;
 import gautamhans.xyz.bakeaid.R;
-import gautamhans.xyz.bakeaid.pojos.Ingredient;
 import gautamhans.xyz.bakeaid.pojos.Recipe;
 import gautamhans.xyz.bakeaid.ui.adapters.RecipeAdapter;
 import gautamhans.xyz.bakeaid.utils.WidgetStateChecker;
